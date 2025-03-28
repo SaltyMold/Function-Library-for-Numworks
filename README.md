@@ -15,9 +15,7 @@ _This repo is a C Function Library for the Numworks Calculator. I added some bas
 
 ## How to use the function library 
 
-
-
-
+Download the source code and modify the main.c file to create your own app.
 
 ## Build the app
 
