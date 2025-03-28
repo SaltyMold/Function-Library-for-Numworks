@@ -8,6 +8,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
+
+
+/*--- Large-font = 10px --- Small-font = 7px ---*/
+
 // Types and constants
 
 typedef uint16_t eadk_color_t;
@@ -261,7 +266,7 @@ extern size_t eadk_external_data_size;
 bool eadk_usb_is_plugged();
 uint32_t eadk_random();
 
-// Adiitional functions not made by SaltyMold
+// Adiitional functions made by SaltyMold
 
 
 #define PI 3.14159265358979323846
@@ -282,9 +287,11 @@ void decode_and_draw_image(eadk_rect_t rect, const char *code); // Decode and dr
 
 void chrono(eadk_point_t point, bool large_font, int duration); // Display a chrono at point with large_font and duration in argument
 
+void secure_sleep(int duration); // You can quit with home even in sleep, use it for higher than 1s sleep
 
-bool is_prime(int n); // Return true if n is prime, false otherwise
-unsigned long long factorial(unsigned int n); // Return the factorial of n
-char* prime_factors(int n); // Return the prime factors of n
+void display_a_bool(bool a, const char* var_name, eadk_point_t point); // Display true or false a bool at point
+void display_an_int(int a, const char* var_name, eadk_point_t point); // Display an int at point
+
+bool when_any_key_pressed(); // Return true if any key is pressed
 
 #endif
