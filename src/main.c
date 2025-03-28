@@ -1,15 +1,9 @@
 #include "eadk.h"
-#include <assert.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
-const char eadk_app_name[] __attribute__((section(".rodata.eadk_app_name"))) = "Hello World";
+const char eadk_app_name[] __attribute__((section(".rodata.eadk_app_name"))) = "Function Library";
 const uint32_t eadk_api_level  __attribute__((section(".rodata.eadk_api_level"))) = 0;
 
+/*--------------------------------------------------------------------------------------*/
 
 void show_menu_screen(){
   eadk_display_push_rect_uniform((eadk_rect_t){0, 0, EADK_SCREEN_WIDTH, EADK_SCREEN_HEIGHT}, eadk_color_white);
@@ -23,9 +17,10 @@ void show_menu_screen(){
   eadk_display_draw_string("Press 4 to see decode_and_draw_image", (eadk_point_t){0, 130}, false, eadk_color_black, eadk_color_white);
   eadk_display_draw_string("Press 5 to see crash_calculator", (eadk_point_t){0, 150}, false, eadk_color_black, eadk_color_white);
   eadk_display_draw_string("Press 6 to see chrono", (eadk_point_t){0, 170}, false, eadk_color_black, eadk_color_white);
-  eadk_display_draw_string("Press 7 to see prime_factor", (eadk_point_t){0, 190}, false, eadk_color_black, eadk_color_white);
+  eadk_display_draw_string("Press 7 to see secure_sleep", (eadk_point_t){0, 190}, false, eadk_color_black, eadk_color_white);
 }
 
+/*--------------------------------------------------------------------------------------*/
 
 void show1() {
   const char *list[] = {"yes", "no", "maybe", "perhaps"};
@@ -39,18 +34,15 @@ void show1() {
     eadk_display_push_rect_uniform((eadk_rect_t){0, 0, 100, EADK_SCREEN_HEIGHT}, eadk_color_white);
 
     int nbr = randint(0, 10);
-    char nbr_str[12]; // Enough for 32 bits number
-    sprintf(nbr_str, "%d", nbr); // Int to String
+    char nbr_str[12]; 
+    sprintf(nbr_str, "%d", nbr);
 
-    const char *chosen = choice(list, 2); // Random choice in list with the first 2 elements ("yes" and "no")
-
+    const char *chosen = choice(list, 2); 
     eadk_display_draw_string(nbr_str, (eadk_point_t){0, 0}, true, eadk_color_black, eadk_color_white);
     eadk_display_draw_string(chosen, (eadk_point_t){0, 20}, true, eadk_color_black, eadk_color_white);
 
     eadk_timing_msleep(500);
 
-
-    // Break loop if home key is pressed
     eadk_keyboard_state_t state = eadk_keyboard_scan();
     if (eadk_keyboard_key_down(state, eadk_key_home)) {
       show_menu_screen();
@@ -59,49 +51,45 @@ void show1() {
   }
 }
 
-
-
-
+/*--------------------------------------------------------------------------------------*/
 
 void show2() {
   char* user_input = "";
   eadk_display_push_rect_uniform((eadk_rect_t){0, 0, EADK_SCREEN_WIDTH, EADK_SCREEN_HEIGHT}, eadk_color_white);
-  eadk_display_draw_string("Write something", (eadk_point_t){80, 120}, true, eadk_color_black, eadk_color_white);
-  eadk_display_draw_string("Press EXE to finish", (eadk_point_t){80, 140}, true, eadk_color_black, eadk_color_white);
-  eadk_display_draw_string("Press home to quit", (eadk_point_t){180, 220}, false, eadk_color_black, eadk_color_white);
-  eadk_display_draw_string("user_input = input(input_point, true, true);", (eadk_point_t){0, 50}, false, eadk_color_black, eadk_color_white);
-  eadk_point_t input_point = {0, 30};
-  user_input = input(input_point, true, true); // text at 0, 30, draw_string = true, large_font = true
+  eadk_display_draw_string("Write something :", (eadk_point_t){0, 0}, true, eadk_color_black, eadk_color_white);
+  eadk_display_draw_string("user_input = input(input_point, true, true);", (eadk_point_t){0, 70}, false, eadk_color_black, eadk_color_white);
+  eadk_point_t input_point = {0, 40};
+  user_input = input(input_point, true, true); 
   if (user_input != "") {
-    eadk_display_draw_string("Your input was :", (eadk_point_t){0, 80}, true, eadk_color_black, eadk_color_white);
-    eadk_display_draw_string(user_input, (eadk_point_t){0, 100}, true, eadk_color_black, eadk_color_white);
+    eadk_display_draw_string("Your input was :", (eadk_point_t){0, 120}, true, eadk_color_black, eadk_color_white);
+    eadk_display_draw_string(user_input, (eadk_point_t){0, 140}, true, eadk_color_black, eadk_color_white);
     eadk_display_draw_string("Wait 5 seconds", (eadk_point_t){0, 220}, true, eadk_color_black, eadk_color_white);
     eadk_timing_msleep(5000);
   }
   show_menu_screen();
 }
 
+/*--------------------------------------------------------------------------------------*/
 
 void show3() {
   eadk_display_push_rect_uniform((eadk_rect_t){0, 0, EADK_SCREEN_WIDTH, EADK_SCREEN_HEIGHT}, eadk_color_white);
-  eadk_display_draw_string("Write something", (eadk_point_t){80, 120}, true, eadk_color_black, eadk_color_white);
-  eadk_display_draw_string("Press EXE to finish", (eadk_point_t){80, 140}, true, eadk_color_black, eadk_color_white);
-  eadk_display_draw_string("Press home to quit", (eadk_point_t){180, 220}, false, eadk_color_black, eadk_color_white);
-  eadk_display_draw_string("user_input = input_int(input_point, true, true);", (eadk_point_t){0, 50}, false, eadk_color_black, eadk_color_white);
+  eadk_display_draw_string("Write something :", (eadk_point_t){0, 0}, true, eadk_color_black, eadk_color_white);
+  eadk_display_draw_string("user_input = input_int(input_point, true, true);", (eadk_point_t){0, 70}, false, eadk_color_black, eadk_color_white);
 
-  eadk_point_t input_point = {0, 30};
-  int user_input = input_int(input_point, true, true); // text at 0, 30, draw_string = true, large_font = true
+  eadk_point_t input_point = {0, 40};
+  int user_input = input_int(input_point, true, true);
   if (user_input != 0) {
     char user_input_str[12];
     sprintf(user_input_str, "%d", user_input);
-    eadk_display_draw_string("Your input was :", (eadk_point_t){0, 80}, true, eadk_color_black, eadk_color_white);
-    eadk_display_draw_string(user_input_str, (eadk_point_t){0, 100}, true, eadk_color_black, eadk_color_white);
+    eadk_display_draw_string("Your input was :", (eadk_point_t){0, 120}, true, eadk_color_black, eadk_color_white);
+    eadk_display_draw_string(user_input_str, (eadk_point_t){0, 140}, true, eadk_color_black, eadk_color_white);
     eadk_display_draw_string("Wait 5 seconds", (eadk_point_t){0, 220}, true, eadk_color_black, eadk_color_white);
     eadk_timing_msleep(5000);
   }
   show_menu_screen();
 }
 
+/*--------------------------------------------------------------------------------------*/
 
 const char *image_code[] = {
   "R502SR142zekfR4gh2FR4POPR141ek3R3Fh3gR3QO3QR139zk4zR2gh4R3PO3PR139Sk4zR2gh4R3PO3PR140ek2eR3Fh3gR3QO3QR140zekfR4gh2FR4POPR158SR617S160M160L4813M2L158O2ML157O3NL156O4NL38NO2NL2NO2NL48MO3ML5MO3ML44O5NL37NO3L2O3NL48MO3ML5MO3ML44O6NL14M5L2M5L10MNO2L2MO2NL49NO2ML5MNO2ML3M3L38O7NL12MO5L2O5ML10MO2L3NONL50O2ML7O2ML3O2ML38O9L11MO5L2O5ML10MO2L3NONL50O2ML7O2ML3O2ML38O10L12NONL4NO2L12MO2L3NONL50O2ML7O2ML3O2ML38MO9NL11NONL4NONL6ML5MO2L3NONL5M2L28M2L10ML2O2ML4M2LO2ML3O2ML39MO8NL11NONL4NO2L4NO3ML3MO2L3NONL4NO3NL8MO3NLNOM2O3NL2MO4ML2MO3MONL2O2ML3NO5ML3O2ML41O7NL11NONL4NO2L3MO5ML2MO2L3NONL3NO5NL7MO4LO2NMO4LMO6L2MO4PNL2O2ML2NO6ML3O2ML42NO5NL11NO9L3O2NLNONL2MO2L3NONL2MO2NLNO2L8NO2M2O2NLNO2MLNO2M2O2NLMNO4NL2O2ML2O2NM2O2ML3O2ML43NO4NL11NO9L2MO2L3O2L2MO2L3NONL2NO2L3O2ML8O2LNO3LMOML2O2ML2NO2L3O2ML4O2MLMO2L3O2ML3O2L43NO5NL11NO2N4O3L2MO2N3O2L2MO2L3NONL2NONL3O2NL8O2LNO3MNOMLMO2ML2MO2L2MO2L5O2MLNO2L3O2ML3O2L42NO6NL11NONL4MO2L2MO7MLMO2L3NONL2NONL3NONL8NOMO2NOMNOL2MO2L3MO2L2MO2L5O2MLNONL3O2ML3O2L40MO8NL11NONL4NO2L2MO2N5L2MO2L3NONL2NONL3NONL8MONONMONO2L2MO2L3MO2L2MO2ML4O2MLNO2L3O2ML3N2L39MO9NL11NONL4MONL2MO2L7MO2L3NONL2NONL3O2MLML6MO3NLO3NL3O2ML2MO2L3O2L5O2MLMO2L3O2ML4ML39O10ML10MO2NML2MNO2ML2O2NL2MNL2NO2MLMNONMLMO2MLNO2LNOML6O3MLO3ML3O2NL2O2NL2MO2ML3MO2NLMO2NLMO2NL3O2ML38O9L11MO5L2O5MLNO5NLNO4LNO4L2O6NLO2NL6NO2L2NO2ML3MO6MLMO4MLMO4NLNO7NLMO2NL38O8L12MO5L2O5ML2NO4MLNO4LNO4L2MO4NL2O2NL6MONL2MO2L5NO4ML2MO4MLMO4ML2O4NO2NL2O2ML38O6NL14M5L2M5L4M3L4M4LM5L4M3L3NOML7ML4M2L6M3L5M4L3M4L4M2L2M2L3M2LM9L29O5NL58O2L56NO6PNL29O4NL58MOML56MN7ML29O3NL60ML95O2NL157M2L7665",
@@ -126,6 +114,8 @@ void show4() {
   }
 }
 
+/*--------------------------------------------------------------------------------------*/
+
 void show5() {
   eadk_display_push_rect_uniform(eadk_screen_rect, eadk_color_black);
   eadk_display_draw_string("crash_calculator();", (eadk_point_t){0, 0}, true, eadk_color_white, eadk_color_black);
@@ -145,6 +135,8 @@ void show5() {
   }
 }
 
+/*--------------------------------------------------------------------------------------*/
+
 void show6(){
   eadk_display_push_rect_uniform(eadk_screen_rect, eadk_color_white);
   eadk_display_draw_string("Press home to quit", (eadk_point_t){180, 220}, false, eadk_color_black, eadk_color_white);
@@ -153,25 +145,16 @@ void show6(){
   show_menu_screen();
 }
 
+/*--------------------------------------------------------------------------------------*/
+
 void show7(){
 
   eadk_display_push_rect_uniform(eadk_screen_rect, eadk_color_white);
   eadk_display_draw_string("Press home to quit", (eadk_point_t){180, 220}, false, eadk_color_black, eadk_color_white);
-  eadk_display_draw_string("char* factors = prime_factors(number);", (eadk_point_t){0, 0}, false, eadk_color_black, eadk_color_white);
+  eadk_display_draw_string("secure_sleep is a function\nthat allow you to sleep with\nthe ability to quit at any\nmoment with the home key", (eadk_point_t){0, 0}, true, eadk_color_black, eadk_color_white);
 
-  int number = 327272400;
-  char* factors = prime_factors(number);
-
-  eadk_point_t point = {10, 50};
-  eadk_display_draw_string("The prime factors of ", point, true, eadk_color_black, eadk_color_white);
-  point.y += 20;
-  char number_str[20];
-  sprintf(number_str, "%d", number);
-  eadk_display_draw_string(number_str, point, true, eadk_color_black, eadk_color_white);
-  point.y += 20;
-  eadk_display_draw_string("are: ", point, true, eadk_color_black, eadk_color_white);
-  point.y += 20;
-  eadk_display_draw_string(factors, point, true, eadk_color_black, eadk_color_white);
+  eadk_display_draw_string("Press 1 to test eadk_timing_msleep(10000)", (eadk_point_t){0, 100}, false, eadk_color_black, eadk_color_white);
+  eadk_display_draw_string("Press 2 to test secure_sleep(10000)", (eadk_point_t){0, 120}, false, eadk_color_black, eadk_color_white);
 
   while (true) {
     eadk_keyboard_state_t state = eadk_keyboard_scan();
@@ -179,8 +162,26 @@ void show7(){
       show_menu_screen();
       break;
     }
+    else if (eadk_keyboard_key_down(state, eadk_key_one)) {
+      eadk_display_push_rect_uniform(eadk_screen_rect, eadk_color_white);
+      eadk_display_draw_string("You are waiting 10s and you\ncan't quit\nTry to press home", (eadk_point_t){0, 100}, true, eadk_color_black, eadk_color_white);
+      eadk_display_draw_string("eadk_timing_msleep(10000)", (eadk_point_t){0, 0}, true, eadk_color_black, eadk_color_white);
+      eadk_timing_msleep(10000);
+      show_menu_screen();
+      break;
+    }
+    else if (eadk_keyboard_key_down(state, eadk_key_two)) {
+      eadk_display_push_rect_uniform(eadk_screen_rect, eadk_color_white);
+      eadk_display_draw_string("You are waiting 10s but you\ncan quit\nTry to press home", (eadk_point_t){0, 100}, true, eadk_color_black, eadk_color_white);
+      eadk_display_draw_string("secure_sleep(10000)", (eadk_point_t){0, 0}, true, eadk_color_black, eadk_color_white);
+      secure_sleep(10000);
+      show_menu_screen();
+      break;
+    }
   }
 }
+
+/*--------------------------------------------------------------------------------------*/
 
 int main() {
   show_menu_screen();
